@@ -56,6 +56,12 @@ will only require minor version bumps, but will need significant justification.
 #![forbid(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
+#[macro_use]
+mod enum_impl;
+
+use enum_impl::i8_repr::I8ByteRepr;
+use enum_impl::u8_repr::U8ByteRepr;
+
 /// An error type returned when a checked integral type conversion fails (mimics [std::num::TryFromIntError])
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct TryFromIntError(());
@@ -401,14 +407,17 @@ macro_rules! nonmax_impls {
     };
 }
 
-nonmax_impls!(def, signed, NonMaxI8, NonZeroI8, i8);
+enum_impl::nonmax!(NonMaxI8, i8, I8ByteRepr);
+enum_impl::nonmax!(NonMaxU8, u8, U8ByteRepr);
+
+nonmax_impls!(signed, NonMaxI8, NonZeroI8, i8);
 nonmax_impls!(def, signed, NonMaxI16, NonZeroI16, i16);
 nonmax_impls!(def, signed, NonMaxI32, NonZeroI32, i32);
 nonmax_impls!(def, signed, NonMaxI64, NonZeroI64, i64);
 nonmax_impls!(def, signed, NonMaxI128, NonZeroI128, i128);
 nonmax_impls!(def, signed, NonMaxIsize, NonZeroIsize, isize);
 
-nonmax_impls!(def, unsigned, NonMaxU8, NonZeroU8, u8);
+nonmax_impls!(unsigned, NonMaxU8, NonZeroU8, u8);
 nonmax_impls!(def, unsigned, NonMaxU16, NonZeroU16, u16);
 nonmax_impls!(def, unsigned, NonMaxU32, NonZeroU32, u32);
 nonmax_impls!(def, unsigned, NonMaxU64, NonZeroU64, u64);
