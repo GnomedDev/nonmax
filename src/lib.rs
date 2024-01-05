@@ -59,6 +59,8 @@ will only require minor version bumps, but will need significant justification.
 #[macro_use]
 mod enum_impl;
 
+#[cfg(feature = "enum_repr_16")]
+use enum_impl::i16_repr::I16ByteRepr;
 use enum_impl::i8_repr::I8ByteRepr;
 use enum_impl::u8_repr::U8ByteRepr;
 
@@ -409,8 +411,13 @@ macro_rules! nonmax_impls {
 
 enum_impl::nonmax!(NonMaxI8, i8, I8ByteRepr);
 enum_impl::nonmax!(NonMaxU8, u8, U8ByteRepr);
+#[cfg(feature = "enum_repr_16")]
+enum_impl::nonmax!(NonMaxI16, i16, I16ByteRepr);
 
 nonmax_impls!(signed, NonMaxI8, NonZeroI8, i8);
+#[cfg(feature = "enum_repr_16")]
+nonmax_impls!(signed, NonMaxI16, NonZeroI16, i16);
+#[cfg(not(feature = "enum_repr_16"))]
 nonmax_impls!(def, signed, NonMaxI16, NonZeroI16, i16);
 nonmax_impls!(def, signed, NonMaxI32, NonZeroI32, i32);
 nonmax_impls!(def, signed, NonMaxI64, NonZeroI64, i64);

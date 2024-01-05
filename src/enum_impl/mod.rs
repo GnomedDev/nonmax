@@ -1,3 +1,5 @@
+#[cfg(feature = "enum_repr_16")]
+pub(crate) mod i16_repr;
 pub(crate) mod i8_repr;
 pub(crate) mod u8_repr;
 
